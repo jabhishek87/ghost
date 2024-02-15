@@ -3,9 +3,9 @@ from apex.contrib import xentropy as label_smoothing
 import unittest
 
 import warnings
-import random
 import numpy as np
 import time
+import secrets
 
 def label_smoothing_raw(x, target, padding_idx, smoothing):
     logprobs = torch.nn.functional.log_softmax(x, dim=-1, dtype=torch.float32)
@@ -29,7 +29,7 @@ def label_smoothing_opt_1(x, target, padding_idx, smoothing):
 
 class LabelSmoothingTest(unittest.TestCase):
     def setUp(self, seed=1234):
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)
@@ -41,7 +41,7 @@ class LabelSmoothingTest(unittest.TestCase):
         logits = torch.randn((N*T, H), dtype=torch.half, device='cuda',
             requires_grad=True)
         labels = torch.randint(0, H, [N*T], device='cuda')
-        for i in random.sample(range(N*T), N*T//6):
+        for i in secrets.SystemRandom().sample(range(N*T), N*T//6):
             labels[i] = padding_idx
         half_to_float = (logits.dtype == torch.half)
 

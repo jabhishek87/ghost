@@ -3,11 +3,12 @@ import torchvision.transforms as transforms
 from PIL import Image
 import glob
 import pickle
-import random
 import os
 import cv2
 import tqdm
 import sys
+import secrets
+
 sys.path.append('..')
 # from utils.cap_aug import CAP_AUG
     
@@ -53,8 +54,8 @@ class FaceEmbed(TensorDataset):
         Xs = cv2.imread(image_path)[:, :, ::-1]
         Xs = Image.fromarray(Xs)
 
-        if random.random() > self.same_prob:
-            image_path = random.choice(self.datasets[random.randint(0, len(self.datasets)-1)])
+        if secrets.SystemRandom().random() > self.same_prob:
+            image_path = secrets.SystemRandom().choice(self.datasets[secrets.SystemRandom().randint(0, len(self.datasets)-1)])
             Xt = cv2.imread(image_path)[:, :, ::-1]
             Xt = Image.fromarray(Xt)
             same_person = 0
@@ -111,14 +112,14 @@ class FaceEmbedVGG2(TensorDataset):
         if self.same_identity:
             folder_name = '/'.join(image_path.split('/')[:-1])
 
-        if random.random() > self.same_prob:
-            image_path = random.choice(self.images_list)
+        if secrets.SystemRandom().random() > self.same_prob:
+            image_path = secrets.SystemRandom().choice(self.images_list)
             Xt = cv2.imread(image_path)[:, :, ::-1]
             Xt = Image.fromarray(Xt)
             same_person = 0
         else:
             if self.same_identity:
-                image_path = random.choice(self.folder2imgs[folder_name])
+                image_path = secrets.SystemRandom().choice(self.folder2imgs[folder_name])
                 Xt = cv2.imread(image_path)[:, :, ::-1]
                 Xt = Image.fromarray(Xt)
             else:
