@@ -37,11 +37,11 @@ class MLP(torch.nn.Module):
         self.mlp_sizes = copy(mlp_sizes)
         self.bias = 1 if bias else 0
 
-        if activation is 'none':
+        if activation == 'none':
             self.activation = 0
-        elif activation is 'relu':
+        elif activation == 'relu':
             self.activation = 1
-        elif activation is 'sigmoid':
+        elif activation == 'sigmoid':
             self.activation = 2
         else:
             raise TypeError("activation must be relu or none.")
