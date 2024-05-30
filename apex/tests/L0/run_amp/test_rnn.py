@@ -1,11 +1,11 @@
 import unittest
 
 from apex import amp
-import random
 import torch
 from torch import nn
 
 from utils import common_init, HALF
+import secrets
 
 class TestRnnCells(unittest.TestCase):
     def setUp(self):
@@ -99,7 +99,7 @@ class TestRnns(unittest.TestCase):
         rnn = nn.RNN(input_size=self.h, hidden_size=self.h, num_layers=num_layers)
         for typ in [torch.float, torch.half]:
             x = torch.randn((self.t, self.b, self.h), dtype=typ).requires_grad_()
-            lens = sorted([random.randint(self.t // 2, self.t) for _ in range(self.b)],
+            lens = sorted([secrets.SystemRandom().randint(self.t // 2, self.t) for _ in range(self.b)],
                           reverse=True)
             # `pack_padded_sequence` breaks if default tensor type is non-CPU
             torch.set_default_tensor_type(torch.FloatTensor)

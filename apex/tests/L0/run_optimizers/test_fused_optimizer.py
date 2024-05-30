@@ -1,12 +1,12 @@
 import unittest
 import os
-import random
 
 import math
 import torch
 import apex
 from itertools import product
 from torch.optim import Optimizer
+import secrets
 
 class TestFusedOptimizer(unittest.TestCase):
     def setUp(self, max_abs_diff=1e-3, max_rel_diff=1, iters=7):
@@ -133,7 +133,7 @@ class TestFusedAdam(TestFusedOptimizer):
             self.gen_param_optim([tensor], self.options)
 
         for i in range(self.iters):
-            scale = random.random() * 1000
+            scale = secrets.SystemRandom().random() * 1000
             half_grads = self.gen_mixed_grad(ref_param, tst_param, scale)
             ref_optim.step()
             tst_optim.step(grads=half_grads, scale=scale)

@@ -1,5 +1,4 @@
 import argparse
-import random
 import sys
 
 import torch
@@ -8,6 +7,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from apex import amp
 from apex.optimizers import FusedAdam
 from apex.contrib.optimizers.distributed_fused_adam import DistributedFusedAdam
+import secrets
 
 
 class TestModel(torch.nn.Module):
@@ -90,7 +90,7 @@ def setup_env(args):
 
     seed = 42 + get_rank()
 
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     torch.manual_seed(seed)
 
     return args
