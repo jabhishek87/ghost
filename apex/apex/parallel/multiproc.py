@@ -1,6 +1,7 @@
 import torch
 import sys
 import subprocess
+from security import safe_command
 
 def docstring_hack():
     """
@@ -28,7 +29,7 @@ for i in range(world_size):
         argslist.append(str(i))
     stdout = None if i == 0 else open("GPU_"+str(i)+".log", "w")
     print(argslist)
-    p = subprocess.Popen([str(sys.executable)]+argslist, stdout=stdout)
+    p = safe_command.run(subprocess.Popen, [str(sys.executable)]+argslist, stdout=stdout)
     workers.append(p)
 
 for p in workers:
